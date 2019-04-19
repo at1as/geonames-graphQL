@@ -54,6 +54,7 @@ class Query(graphene.ObjectType):
       longitude     = graphene.Float(default_value=None),
       feature_class = graphene.String(default_value=None),
       feature_code  = graphene.String(default_value=None),
+      country_code  = graphene.String(default_value=None),
       admin1_code   = graphene.String(default_value=None),
       admin2_code   = graphene.String(default_value=None),
       admin3_code   = graphene.String(default_value=None),
@@ -78,7 +79,9 @@ class Query(graphene.ObjectType):
         if args.get('feature_class'):
           query = query.filter(Geoname._meta.model.feature_class == args.get('feature_class'))
         if args.get('feature_code'):
-          query = query.filter(Geoname._meta.model.feature_class == args.get('feature_code'))
+          query = query.filter(Geoname._meta.model.feature_code == args.get('feature_code'))
+        if args.get('country_code'):
+          query = query.filter(Geoname._meta.model.country_code== args.get('country_code'))
 
         # Generally the most populous matching location is the we're searching for
         query = query.order_by(Geoname._meta.model.population)

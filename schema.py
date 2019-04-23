@@ -50,8 +50,8 @@ class Query(graphene.ObjectType):
       geoname_id     = graphene.Int(default_value=None),
       name           = graphene.String(default_value=None),
       asciiname      = graphene.String(default_value=None),
-      #latitude       = graphene.Float(default_value=None),
-      #longitude      = graphene.Float(default_value=None),
+      latitude       = graphene.Float(default_value=None),
+      longitude      = graphene.Float(default_value=None),
       feature_class  = graphene.String(default_value=None),
       feature_code   = graphene.String(default_value=None),
       country_code   = graphene.String(default_value=None),
@@ -76,6 +76,10 @@ class Query(graphene.ObjectType):
           query = query.filter(Geoname._meta.model.geoname_id == args.get('geoname_id'))
         if args.get('name'):
           query = query.filter(Geoname._meta.model.asciiname.like(args.get('name') + "%"))
+        if args.get('latitude'):
+          query = query.filter(Geoname._meta.model.latitude == args.get('latitude'))
+        if args.get('longitude'):
+          query = query.filter(Geoname._meta.model.latitude == args.get('longitude'))
         if args.get('asciiname'):
           query = query.filter(Geoname._meta.model.asciiname.like(args.get('asciiname') + "%"))
         if args.get('feature_class'):

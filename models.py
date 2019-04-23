@@ -1,6 +1,6 @@
 from database import Base, engine
 from sqlalchemy import Column, Integer, Table, ForeignKey, PrimaryKeyConstraint
-from sqlalchemy.orm import relationship, relation
+from sqlalchemy.orm import backref, relationship, relation
 from sqlalchemy.types import CHAR, Text, VARCHAR
 
 
@@ -24,7 +24,7 @@ class GeonameModel(Base):
 
   Admin1Codes    = relationship("Admin1CodeModel")
   Admin2Codes    = relationship("Admin2CodeModel")
-  Admin5Codes    = relationship("Admin5CodeModel", uselist=False, backref='geoname')
+  Admin5Codes    = relationship("Admin5CodeModel", uselist=False)
   Alternatenames = relationship("AlternatenameModel")
   ContinentCodes = relationship("ContinentCodeModel")
   CountryInfo    = relationship("CountryInfoModel")

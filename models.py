@@ -15,6 +15,7 @@ class GeonameModel(Base):
   Admin1Code = relationship("Admin1CodeModel", uselist=False)
   Admin2Code = relationship("Admin2CodeModel", uselist=False)
   admin5_code = relationship("Admin5CodeModel", uselist=False, back_populates="geoname")
+  CountryInfo = relation("CountryInfoModel", foreign_keys='CountryInfoModel.iso_alpha2', backref='country', uselist=False)
 
   children = relationship("GeonameModel",
       secondary=HierarchyRelationship,
@@ -27,7 +28,6 @@ class GeonameModel(Base):
 
   Alternatenames = relationship("AlternatenameModel")
   ContinentCodes = relationship("ContinentCodeModel")
-  CountryInfo    = relationship("CountryInfoModel", uselist=False)
 
 class Admin1CodeModel(Base):
   __tablename__ = 'admin1_codes'
@@ -69,7 +69,7 @@ class CountryInfoModel(Base):
   __table_args__ = (
     PrimaryKeyConstraint("iso_alpha2", "iso_alpha3"),
   )
-  iso_alpha2 = Column(CHAR(2), nullable=False)
+  iso_alpha2 = Column(CHAR(2), ForeignKey("geoname.country_code"), nullable=False)
   iso_alpha3 = Column(CHAR(3), nullable=False)
   geoname_id = Column(Integer, ForeignKey("geoname.geoname_id"))
 

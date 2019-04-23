@@ -47,6 +47,8 @@ class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     geoname = graphene.List(
       Geoname,
+
+      # Fields on model
       geoname_id     = graphene.Int(default_value=None),
       name           = graphene.String(default_value=None),
       asciiname      = graphene.String(default_value=None),
@@ -61,16 +63,20 @@ class Query(graphene.ObjectType):
       admin4_code    = graphene.String(default_value=None),
       admin5_code    = graphene.String(default_value=None),
 
+      # Fields with polarity
       min_population = graphene.Float(default_value=None),
       max_population = graphene.Float(default_value=None),
 
-      limit          = graphene.Int(default_value=5)
+      # Pagination
+      limit          = graphene.Int(default_value=5),
+      offset         = graphene.Int(default_value=0)
     )
     
     def resolve_geoname(self, info, **args):
         query = Geoname.get_query(info)
         geoname_id = args.get('geoname_id')
         limit = args.get('limit')
+        offset = args.get('offset')
 
         if args.get('geoname_id'):
           query = query.filter(Geoname._meta.model.geoname_id == args.get('geoname_id'))
@@ -107,7 +113,7 @@ class Query(graphene.ObjectType):
         # Generally the most populous matching location is the we're searching for
         query = query.order_by(Geoname._meta.model.population)
         
-        return query.limit(limit).all()
+        return query.offset(offset).limit(limit).all()
 
 schema = graphene.Schema(query=Query, types=[Geoname])
 

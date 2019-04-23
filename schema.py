@@ -97,7 +97,8 @@ class Query(graphene.ObjectType):
         if args.get('admin4_code'):
           query = query.filter(Geoname._meta.model.admin4_code == args.get('admin4_code'))
         if args.get('admin5_code'):
-          pass # TODO
+          # TODO: Slow! a 'join' will probably be fasted than .has(...)
+          query = query.filter(Geoname._meta.model.admin5_code.has(admin5_code = args.get('admin5_code')))
         if args.get('min_population'):
           query = query.filter(Geoname._meta.model.population > args.get('min_population'))
         if args.get('max_population'):

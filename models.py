@@ -12,6 +12,7 @@ HierarchyRelationship = h_table = Table('hierarchy', Base.metadata,
 class GeonameModel(Base):
   __tablename__ = 'geoname'
   geoname_id  = Column(Integer, primary_key=True)
+  admin5_code = relationship("Admin5CodeModel", uselist=False, back_populates="geoname")
 
   children = relationship("GeonameModel",
       secondary=HierarchyRelationship,
@@ -24,7 +25,6 @@ class GeonameModel(Base):
 
   Admin1Codes    = relationship("Admin1CodeModel")
   Admin2Codes    = relationship("Admin2CodeModel")
-  Admin5Codes    = relationship("Admin5CodeModel", uselist=False)
   Alternatenames = relationship("AlternatenameModel")
   ContinentCodes = relationship("ContinentCodeModel")
   CountryInfo    = relationship("CountryInfoModel")
@@ -54,6 +54,7 @@ class Admin5CodeModel(Base):
   )
   geoname_id = Column(Integer, ForeignKey("geoname.geoname_id"))
   admin5_code = Column(VARCHAR(40))
+  geoname = relationship("GeonameModel", back_populates="admin5_code")
 
 class AlternatenameModel(Base):
   __tablename__ = 'alternatenames'

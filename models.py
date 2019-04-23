@@ -11,7 +11,9 @@ HierarchyRelationship = h_table = Table('hierarchy', Base.metadata,
 
 class GeonameModel(Base):
   __tablename__ = 'geoname'
-  geoname_id  = Column(Integer, primary_key=True)
+  geoname_id = Column(Integer, primary_key=True)
+  Admin1Code = relationship("Admin1CodeModel", uselist=False)
+  Admin2Code = relationship("Admin2CodeModel", uselist=False)
   admin5_code = relationship("Admin5CodeModel", uselist=False, back_populates="geoname")
 
   children = relationship("GeonameModel",
@@ -23,11 +25,9 @@ class GeonameModel(Base):
       primaryjoin=HierarchyRelationship.c.child_id==geoname_id,
       secondaryjoin=HierarchyRelationship.c.parent_id==geoname_id)
 
-  Admin1Codes    = relationship("Admin1CodeModel")
-  Admin2Codes    = relationship("Admin2CodeModel")
   Alternatenames = relationship("AlternatenameModel")
   ContinentCodes = relationship("ContinentCodeModel")
-  CountryInfo    = relationship("CountryInfoModel")
+  CountryInfo    = relationship("CountryInfoModel", uselist=False)
 
 class Admin1CodeModel(Base):
   __tablename__ = 'admin1_codes'

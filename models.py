@@ -1,28 +1,33 @@
 from database import Base, engine
-from sqlalchemy import Column, Integer, ForeignKey, PrimaryKeyConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, Table, ForeignKey, PrimaryKeyConstraint
+from sqlalchemy.orm import relationship, relation
 from sqlalchemy.types import CHAR, Text, VARCHAR
+
+
+HierarchyRelationship = h_table = Table('hierarchy', Base.metadata,
+  Column("parent_id", Integer, ForeignKey('geoname.geoname_id')),
+  Column("child_id", Integer, ForeignKey('geoname.geoname_id'))
+)
 
 class GeonameModel(Base):
   __tablename__ = 'geoname'
-  geoname_id = Column(Integer, primary_key=True)
-  #child_id   = Column(Integer, ForeignKey("hierarchy.child_id"))
-  #parent_id  = Column(Integer, ForeignKey("hierarchy.parent_id"))
+  geoname_id  = Column(Integer, primary_key=True)
+
+  children = relationship("GeonameModel",
+      secondary=HierarchyRelationship,
+      primaryjoin=HierarchyRelationship.c.parent_id==geoname_id,
+      secondaryjoin=HierarchyRelationship.c.child_id==geoname_id)
+  parents = relation("GeonameModel",
+      secondary=HierarchyRelationship,
+      primaryjoin=HierarchyRelationship.c.child_id==geoname_id,
+      secondaryjoin=HierarchyRelationship.c.parent_id==geoname_id)
 
   Admin1Codes    = relationship("Admin1CodeModel")
   Admin2Codes    = relationship("Admin2CodeModel")
-  Admin5Codes    = relationship("Admin5CodeModel")
+  Admin5Codes    = relationship("Admin5CodeModel", uselist=False, backref='geoname')
   Alternatenames = relationship("AlternatenameModel")
   ContinentCodes = relationship("ContinentCodeModel")
   CountryInfo    = relationship("CountryInfoModel")
-  #Child          = relationship("HierarchyModel", foreign_keys=[child_id])
-  #Parent         = relationship("HierarchyModel", foreign_keys=[parent_id])
-
-  #Parent         = relationship("HierarchyModel", Column(Integer, ForeignKey("hierarchy.parent_id"))
-  #HierarchyParent = relationship("HierarchyModel",
-  #    primaryjoin=HierarchyModel().child_id,
-  #    secondaryjoin="hierarchy.parent_id"
-  #)
 
 class Admin1CodeModel(Base):
   __tablename__ = 'admin1_codes'
@@ -48,7 +53,7 @@ class Admin5CodeModel(Base):
     PrimaryKeyConstraint("geoname_id", "admin5_code"),
   )
   geoname_id = Column(Integer, ForeignKey("geoname.geoname_id"))
-  admin5_code = Column(Integer)
+  admin5_code = Column(VARCHAR(40))
 
 class AlternatenameModel(Base):
   __tablename__ = 'alternatenames'
@@ -70,14 +75,6 @@ class CountryInfoModel(Base):
 class FeatureCodeModel(Base):
   __tablename__ = 'feature_codes'
   code = Column(VARCHAR, primary_key=True)
-
-class HierarchyModel(Base):
-  __tablename__ = 'hierarchy'
-  __table_args__ = (
-    PrimaryKeyConstraint("parent_id", "child_id"), # key is also on 'type', a reserved word in python
-  )
-  parent_id = Column(Integer, ForeignKey("geoname.geoname_id"), nullable=False)
-  child_id = Column(Integer, ForeignKey("geoname.geoname_id"), nullable=False)
 
 class IsoLanguageCodeModel(Base):
   __tablename__ = 'iso_language_codes'
@@ -108,7 +105,6 @@ class UserTagModel(Base):
   __table_args__ = (
     PrimaryKeyConstraint("geoname_id", "tag"),
   )
-
   geoname_id = Column(Integer, ForeignKey("geoname.geoname_id"), nullable=False)
   tag = Column(VARCHAR(100))
 

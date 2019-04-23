@@ -7,6 +7,100 @@ Note that this assumes you have already imported the database to MySQL. Most col
 
 ## Usage
 
+#### Hierarchy
+Query:
+```
+{
+  geoname(geonameId:6251999) {
+		geonameId
+    asciiname
+    parents {
+      edges {
+        node {
+          geonameId
+          asciiname
+        }
+      }
+    }
+    children(first:2) {
+      edges {
+        node {
+          geonameId
+          asciiname
+          children(first:1) {
+            edges {
+              node {
+                geonameId
+                asciiname
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+Response:
+```
+{
+  "data": {
+    "geoname": [
+      {
+        "geonameId": "6251999",
+        "asciiname": "Canada",
+        "parents": {
+          "edges": [
+            {
+              "node": {
+                "geonameId": "6255149",
+                "asciiname": "North America"
+              }
+            },
+            {
+              "node": {
+                "geonameId": "7729890",
+                "asciiname": "Northern America"
+              }
+            }
+          ]
+        },
+        "children": {
+          "edges": [
+            {
+              "node": {
+                "geonameId": "6354959",
+                "asciiname": "Newfoundland and Labrador",
+                "children": {
+                  "edges": []
+                }
+              }
+            },
+            {
+              "node": {
+                "geonameId": "6115047",
+                "asciiname": "Quebec",
+                "children": {
+                  "edges": [
+                    {
+                      "node": {
+                        "geonameId": "6077246",
+                        "asciiname": "Montreal"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+```
+
+
 #### Sample Query:
 ```
 {

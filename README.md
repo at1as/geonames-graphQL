@@ -2,7 +2,7 @@
 
 A graphQL server for the open source [geonames database](http://download.geonames.org/export/dump/)
 
-Note that this assumes you have already imported the database to MySQL. Most column configurations are determined dynamically, however very in models.py that those specified match your own settings. The following tables should be present:
+Note that this assumes you have already imported the database to MySQL. Most column configurations are determined dynamically, but you can verify your setup in [TABLE_STRUCTURE.sql](docs/TABLE_STRUCTURE.sql) or create it from scratch using that SQL file.
 
 ```
 mysql> show tables;
@@ -134,9 +134,28 @@ The Geonames dataset provides a large amount of information. The schema follows 
 
 ```
 
+### Running
+
+Ensure MySQL is running and then start the server:
+```
+❯ python3 app.py
+```
+
+Navigate your browser to localhost:5000 to use the interactive request builder, or use the API directly:
+```
+curl 'http://localhost:5000/graphql?' --data '{"query":"{
+    geoname(geonameId: 6115047) {
+      asciiname
+    }
+  }",
+  "variables":null,
+  "operationName":null
+}'
+```
+
 ### Sample Queries
 
-See [EXAMPLES.md](EXAMPLES.md)!
+See [EXAMPLES.md](docs/EXAMPLES.md)
 
 ### Environemnt
 

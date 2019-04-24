@@ -1,10 +1,11 @@
 from database import Base, engine
 from sqlalchemy import Column, Integer, Table, ForeignKey, PrimaryKeyConstraint
+from sqlalchemy.dialects.mysql import MEDIUMBLOB
 from sqlalchemy.orm import backref, relationship, relation
 from sqlalchemy.types import CHAR, Text, VARCHAR
 
 
-HierarchyRelationship = h_table = Table('hierarchy', Base.metadata,
+HierarchyRelationship = Table('hierarchy', Base.metadata,
   Column("parent_id", Integer, ForeignKey('geoname.geoname_id')),
   Column("child_id", Integer, ForeignKey('geoname.geoname_id'))
 )
@@ -42,7 +43,7 @@ class Admin2CodeModel(Base):
   __table_args__ = (
     PrimaryKeyConstraint("code", "name", "asciiname", "geoname_id"),
   )
-  code = Column(CHAR)
+  code = Column(VARCHAR(30))
   name = Column(Text)
   asciiname = Column(Text)
   geoname_id = Column(Integer, ForeignKey("geoname.geoname_id"))
@@ -75,7 +76,7 @@ class CountryInfoModel(Base):
 
 class FeatureCodeModel(Base):
   __tablename__ = 'feature_codes'
-  code = Column(VARCHAR, primary_key=True)
+  code = Column(VARCHAR(7), primary_key=True)
 
 class IsoLanguageCodeModel(Base):
   __tablename__ = 'iso_language_codes'

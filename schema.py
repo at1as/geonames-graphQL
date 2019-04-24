@@ -43,7 +43,6 @@ class UserTag(SQLAlchemyObjectType):
         interfaces = (graphene.relay.Node, )
 
 class Query(graphene.ObjectType):
-    
     node = graphene.relay.Node.Field()
     geoname = graphene.List(
       Geoname,

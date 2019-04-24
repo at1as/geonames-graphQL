@@ -27,6 +27,11 @@ class Alternatename(SQLAlchemyObjectType):
         model = AlternatenameModel
         interfaces = (graphene.relay.Node, )
 
+class Boundaries(SQLAlchemyObjectType):
+    class Meta:
+        model = BoundariesModel
+        interfaces = (graphene.relay.Node, )
+
 class ContinentCode(SQLAlchemyObjectType):
     class Meta:
         model = ContinentCodeModel 

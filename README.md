@@ -13,6 +13,7 @@ mysql> show tables;
 | admin2_codes                 |
 | admin5_codes                 |
 | alternatenames               |
+| boundaries                   |
 | continent_codes              |
 | country_info                 |
 | feature_codes                |
@@ -23,7 +24,7 @@ mysql> show tables;
 | timezones                    |
 | usertags                     |
 +------------------------------+
-13 rows in set (0.01 sec)
+14 rows in set (0.01 sec)
 ```
 
 ### Filter Params

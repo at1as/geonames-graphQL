@@ -16,6 +16,7 @@ class GeonameModel(Base):
   Admin1Code = relationship("Admin1CodeModel", uselist=False)
   Admin2Code = relationship("Admin2CodeModel", uselist=False)
   admin5_code = relationship("Admin5CodeModel", uselist=False, back_populates="geoname")
+  Boundaries = relationship("BoundariesModel", uselist=False)
   CountryInfo = relation("CountryInfoModel", foreign_keys='CountryInfoModel.iso_alpha2', backref='country', uselist=False)
 
   children = relationship("GeonameModel",
@@ -60,6 +61,14 @@ class Admin5CodeModel(Base):
 class AlternatenameModel(Base):
   __tablename__ = 'alternatenames'
   alternatename_id = Column(Integer, primary_key=True)
+
+class BoundariesModel(Base):
+  __tablename__ = 'boundaries'
+  geoname_id = Column(Integer, ForeignKey("geoname.geoname_id"), primary_key=True)
+  # geo_json is actually a MEDIUMBLOB, however that response is in bytes and not json_seraliziable
+  # This is temporary, until an upgrade to MySQL 5.7 allows for JSON format
+  # Although the data size exceeds Text, SQLAlchemy will nevertheless fetch all data, without truncation
+  geo_json = Column(Text)
 
 class ContinentCodeModel(Base):
   __tablename__ = 'continent_codes'

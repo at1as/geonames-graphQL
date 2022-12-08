@@ -1,6 +1,6 @@
 aniso8601==3.0.2
 arrow==0.12.1
-certifi==2019.3.9
+certifi==2022.12.7
 chardet==3.0.4
 Click==7.0
 cx-Freeze==5.1.1
